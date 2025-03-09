@@ -2,7 +2,7 @@ import React from "react";
 
 function Navbar() {
     return (
-        <nav class="navbar navbar-expand-lg fixed-top bg-dark text-white">
+        <nav class="navbar navbar-expand-lg bg-dark text-white">
             <div class="container-fluid ms-5">
                 <a class="navbar-brand text-white px-2" href="#">Soundcloud</a>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -21,7 +21,7 @@ function Navbar() {
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="search" aria-label="search" aria-describedby="search" />
                             <button class="btn bg-white" type="button" id="search">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search text-dark" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search text-dark" viewBox="0 0 16 16">
                                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
                                 </svg>
                             </button>

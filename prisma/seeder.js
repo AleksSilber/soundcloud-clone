@@ -4,7 +4,7 @@ import { faker } from "@faker-js/faker";
 const prisma = new PrismaClient();
 
 async function main() {
-  const users = await prisma.user.findMany(); // Get all users
+  const users = await prisma.user.findMany();
   if (users.length === 0) {
     // If no users exist, create 50 users
     for (let i = 0; i < 50; i++) {
@@ -24,11 +24,11 @@ async function main() {
         const track = await prisma.track.create({
           data: {
             userId: user.id,
-            title: faker.lorem.words(),
+            title: faker.music.songName(),
             description: faker.lorem.sentence(),
-            fileUrl: faker.internet.url(),
-            coverImage: faker.image.avatar(),
-            duration: faker.number.int({ min: 120, max: 300 }), // Correct usage of faker.number.int()
+            fileUrl: "https://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.ogg",
+            coverImage: faker.image.avatarGitHub(),
+            duration: faker.number.int({ min: 120, max: 300 }),
             genre: faker.music.genre(),
             uploadedAt: faker.date.recent(),
           },
@@ -73,6 +73,7 @@ async function main() {
           data: {
             userId: user.id,
             name: faker.lorem.words(),
+            coverImage: faker.image.avatarGitHub(),
             description: faker.lorem.sentence(),
             createdAt: faker.date.recent(),
           },
@@ -109,7 +110,7 @@ async function main() {
       // Create followers for each user
       const allUsers = await prisma.user.findMany();
       for (const user of allUsers) {
-        const followersCount = faker.number.int({ min: 1, max: 10 }); // Correct usage of faker.number.int()
+        const followersCount = faker.number.int({ min: 1, max: 10 });
         for (let f = 0; f < followersCount; f++) {
           const randomFollower = allUsers[Math.floor(Math.random() * allUsers.length)];
           if (randomFollower.id !== user.id) {
