@@ -1,0 +1,113 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  username       String   @unique
+  email          String   @unique
+  passwordHash   String
+  profilePicture String?
+  bio            String?
+  createdAt      DateTime @default(now())
+
+  // Relations
+  tracks        Track[]
+  playlists     Playlist[]
+  comments      Comment[]
+  likes         Like[]
+  follows       Follow[]       @relation("Follower")
+  following     Follow[]       @relation("Following")
+}
+
+model Track {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  title       String
+  description String?
+  fileUrl     String
+  coverImage  String?
+  duration    Int
+  genre       String?
+  plays       Int      @default(0)
+  uploadedAt  DateTime @default(now())
+
+  // Relations
+  user          User            @relation(fields: [userId], references: [id])
+  playlists     Playlist[]      @relation("TrackInPlaylist")
+  likes         Like[]
+  comments      Comment[]
+
+  PlaylistTrack PlaylistTrack[]
+
+  @@index([userId])
+}
+
+model Playlist {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+
+  // Relations
+  user          User            @relation(fields: [userId], references: [id])
+  tracks        Track[]         @relation("TrackInPlaylist")
+  PlaylistTrack PlaylistTrack[]
+}
+
+model PlaylistTrack {
+  playlistId Int
+  trackId    Int
+
+  // Relations
+  playlist Playlist @relation(fields: [playlistId], references: [id])
+  track    Track    @relation(fields: [trackId], references: [id])
+
+  @@id([playlistId, trackId])
+}
+
+model Like {
+  userId  Int
+  trackId Int
+  likedAt DateTime @default(now())
+
+  // Relations
+  user  User  @relation(fields: [userId], references: [id])
+  track Track @relation(fields: [trackId], references: [id])
+
+  @@id([userId, trackId])
+}
+
+model Comment {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  trackId     Int
+  content     String
+  commentedAt DateTime @default(now())
+
+  // Relations
+  user  User  @relation(fields: [userId], references: [id])
+  track Track @relation(fields: [trackId], references: [id])
+}
+
+model Follow {
+  followerId  Int
+  followingId Int
+  followedAt  DateTime @default(now())
+
+  // Relations
+  follower  User @relation("Follower", fields: [followerId], references: [id])
+  following User @relation("Following", fields: [followingId], references: [id])
+
+  @@id([followerId, followingId])
+}
+
+
