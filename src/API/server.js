@@ -12,7 +12,8 @@ app.get('/songs', async (req, res) => {
   const songs = await prisma.track.findMany({
     select: {
       title: true,
-      coverImage: true
+      coverImage: true,
+      id: true
     },
   })
   res.json(songs)

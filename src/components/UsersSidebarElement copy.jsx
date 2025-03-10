@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 function UsersSidebarElement() {
   const [users, setUsers] = useState([]);
   const [originalUsers, setOriginalUsers] = useState([]);
+  const [previousUsers, setPreviousUsers] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -11,7 +12,8 @@ function UsersSidebarElement() {
         let data = await response.json();
 
         setOriginalUsers(data);
-        setUsers(shuffleArray(data).slice(0, 3));
+        const newUsers = getNewUsers(data, []);
+        setUsers(newUsers);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -29,17 +31,27 @@ function UsersSidebarElement() {
     return shuffled;
   }
 
+  function getNewUsers(allUsers, prevUsers) {
+    let availableUsers = allUsers.filter(user => !prevUsers.includes(user));
+    if (availableUsers.length < 3) {
+      availableUsers = allUsers;
+    }
+    return shuffleArray(availableUsers).slice(0, 3);
+  }
+
   const refreshUsers = () => {
-    setUsers(shuffleArray(originalUsers).slice(0, 3));
+    const newUsers = getNewUsers(originalUsers, previousUsers);
+    setPreviousUsers(users);
+    setUsers(newUsers);
   };
 
   return (
     <li>
       <a className="pe-5">Artists you should follow</a>
-      <a onClick={refreshUsers}>Refresh list</a>
+      <a href="#" onClick={refreshUsers}>Refresh list</a>
       <ul className="list-unstyled">
         {users.map((user, index) => (
-          <li key={index}>
+          <li key={index} className="">
             <img 
               src={user.profilePicture} 
               alt="User" 
@@ -54,3 +66,4 @@ function UsersSidebarElement() {
 }
 
 export default UsersSidebarElement;
+
