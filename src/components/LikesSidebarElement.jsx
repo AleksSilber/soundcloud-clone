@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 
 function LikesSidebarElement({ userId }) {
   const [likedSongs, setLikedSongs] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const fetchLikedSongs = async () => {
       try {
+        const usersRes = await fetch("http://localhost:5001/users");
+        const usersData = await usersRes.json();
+        setUsers(usersData);
+
         const likesResponse = await fetch("http://localhost:5001/likes");
         const likesData = await likesResponse.json();
         
@@ -30,22 +35,34 @@ function LikesSidebarElement({ userId }) {
     fetchLikedSongs();
   }, [userId]);
 
+  function truncateTitle(title) {
+    return title.length > 30? title.slice(0, 30) + "..." : title;
+  }
+
   return (
     <li className="mt-5">
       <a className="pe-5">Recently Liked Songs</a>
       <a href="/likes" className="ps-5">View all</a>
       <hr className="w-75 border opacity-25" />
       <ul className="list-unstyled">
-        {likedSongs.map((song, index) => (
+        {likedSongs.map((song, index) => {
+           const user = users.find((u) => u.id === song.userId);
+           return(
           <li key={index}>
+            <div className="d-inline-flex align-items-center">
             <img 
               src={song.coverImage} 
               alt="Cover" 
-              className="d-inline img-fluid col-1 my-2 me-2" 
+              className="d-inline img-fluid my-2 me-2" 
+              style={{width: "50px", height: "50px"}}
             />
-            <p className="d-inline">{song.title}</p>
+            <div className="d-flex flex-column mt-2">
+            <small>{user.username}</small>
+            <p className="d-inline">{truncateTitle(song.title)}</p>
+            </div>
+            </div>
           </li>
-        ))}
+          )})}
       </ul>
     </li>
   );

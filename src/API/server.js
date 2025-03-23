@@ -1,13 +1,20 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 import express from "express";
 import cors from "cors";
 
+// Initialize express app and Prisma client
+const app = express();
+const prisma = new PrismaClient();
 
-const app = express()
+// Middleware to parse JSON bodies
+app.use(express.json()); // <-- Add this line to parse JSON bodies
+
+// Enable CORS
 app.use(cors());
-const port = 5001
-const prisma = new PrismaClient()
 
+const port = 5001;
+
+// Existing routes...
 app.get('/songs', async (req, res) => {
   const songs = await prisma.track.findMany({
     select: {
@@ -19,7 +26,7 @@ app.get('/songs', async (req, res) => {
     },
   })
   res.json(songs)
-})
+});
 
 app.get('/playlists', async (req, res) => {
   const playlists = await prisma.playlist.findMany({
@@ -29,7 +36,7 @@ app.get('/playlists', async (req, res) => {
     },
   })
   res.json(playlists)
-})
+});
 
 app.get('/users', async (req, res) => {
   const users = await prisma.user.findMany({
@@ -40,7 +47,7 @@ app.get('/users', async (req, res) => {
     },
   })
   res.json(users)
-})
+});
 
 app.get('/likes', async (req, res) => {
   const likes = await prisma.like.findMany({
@@ -50,7 +57,7 @@ app.get('/likes', async (req, res) => {
     },
   })
   res.json(likes)
-})
+});
 
 app.get('/followers', async (req, res) =>{
   const follows = await prisma.follow.findMany({
@@ -60,46 +67,56 @@ app.get('/followers', async (req, res) =>{
     },
   })
   res.json(follows);
-})
+});
 
+// New POST and DELETE routes for following and unfollowing
 app.post('/followers', async (req, res) => {
-  const userId = req.body.userId; 
-  const currentUserId = 1;
+  const { followerId, followingId } = req.body;
 
-  if (!userId) {
-    return res.status(400).json({ error: "User ID is required" });
+  if (!followerId || !followingId) {
+    return res.status(400).json({ error: 'Missing followerId or followingId' });
   }
 
   try {
-    const result = await prisma.follow.create({
+    // Create a follow relationship in the database
+    const follow = await prisma.follow.create({
       data: {
-        followerId: currentUserId,
-        followingId: Number(userId),
+        followerId,
+        followingId,
       },
     });
-    res.json(result);
+    res.status(201).json(follow);
   } catch (error) {
-    console.error("Error following user:", error);
-    res.status(500).json({ error: "Could not follow user" });
+    console.error(error);
+    res.status(500).json({ error: 'Error following the user' });
   }
 });
 
+app.delete('/followers', async (req, res) => {
+  const { followerId, followingId } = req.body;
 
-app.delete('/followers/:userId', async(req,res) => {
-  const userId = req.body.userId
-  const currentUserId = 1;
+  if (!followerId || !followingId) {
+    return res.status(400).json({ error: 'Missing followerId or followingId' });
+  }
 
-  const result = await prisma.follow.delete({
-    where: {
-      followerId_followingId: {
-        followerId: currentUserId,
-        followingId: Number(userId),
+  try {
+    // Delete the follow relationship in the database
+    const follow = await prisma.follow.delete({
+      where: {
+        followerId_followingId: {
+          followerId,
+          followingId,
+        },
       },
-    },
-  });
-  res.json(result)
+    });
+    res.status(200).json(follow);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error unfollowing the user' });
+  }
 });
 
+// Start the server
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});
