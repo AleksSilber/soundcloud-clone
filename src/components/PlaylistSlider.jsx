@@ -47,14 +47,14 @@ function PlaylistSlider() {
   const displayedPlaylists = playlists.slice(currentIndex, currentIndex + 4);
 
   return (
-    <div id="carouselExample" className="carousel slide col-md-6 mx-5 text-center ">
-        <h4 className="ps-0">Playlist made for you</h4>
+    <div id="carouselExample" className="carousel slide col-md-7 mx-5 px-5">
+        <h4 className="ps-0 mb-4">Playlists made for you</h4>
       <div className="carousel-inner">
         <div className="carousel-item active">
           <div className="row g-3">
             {displayedPlaylists.map((playlist, index) => (
-              <div key={index} className="col-6 col-md-3">
-                <div className="card">
+              <div key={index} className="col-md-3">
+                <div>
                   <img
                     src={playlist.coverImage}
                     className="card-img-top img-fluid"
@@ -72,23 +72,26 @@ function PlaylistSlider() {
 
       {/* Navigation */}
       <button 
-        className="carousel-control-prev" 
+        className="carousel-control-prev h-75 mt-5" 
         type="button" 
         onClick={prevPlaylists} 
         disabled={currentIndex === 0}
+        hidden = {currentIndex === 0}
       >
-        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span className="carousel-control-prev-icon bg-black rounded-1" aria-hidden="true"></span>
         <span className="visually-hidden">Previous</span>
       </button>
       <button 
-        className="carousel-control-next" 
+        className="carousel-control-next h-75 mt-5" 
         type="button" 
         onClick={nextpPlaylists} 
         disabled={currentIndex + 4 >= playlists.length}
+        hidden ={currentIndex + 4 >= playlists.length}
       >
-        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+        <span className="carousel-control-next-icon bg-black rounded-1" aria-hidden="true"></span>
         <span className="visually-hidden">Next</span>
       </button>
+      <hr className="mt-5 opacity-25 border"/>
     </div>
   );
 }

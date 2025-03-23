@@ -48,17 +48,17 @@ function SongSlider() {
   const displayedSongs = songs.slice(currentIndex, currentIndex + 4);
 
   return (
-    <div id="carouselExample" className="carousel slide col-md-6 mx-5 text-center pb-5">
-        <h4 className="ps-0">Songs you might like</h4>
+    <div id="carouselExample" className="carousel slide col-md-7 mx-5 px-5 pb-5">
+        <h4 className="ps-0 mb-4">Songs you might like</h4>
       <div className="carousel-inner">
         <div className="carousel-item active">
           <div className="row g-3">
             {displayedSongs.map((song, index) => (
-              <div key={index} className="col-6 col-md-3">
-                <div className="card">
+              <div key={index} className="col-md-3">
+                <div>
                   <img
                     src={song.coverImage}
-                    className="card-img-top img-fluid"
+                    className="img-fluid"
                     alt="Song Cover"
                   />
                   <div className="card-body">
@@ -73,24 +73,28 @@ function SongSlider() {
 
       {/* Navigation */}
       <button 
-        className="carousel-control-prev" 
+        className="carousel-control-prev h-75 mt-4" 
         type="button" 
         onClick={prevSongs} 
         disabled={currentIndex === 0}
+        hidden={currentIndex === 0}
       >
-        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span className="carousel-control-prev-icon bg-black rounded-1" aria-hidden="true"></span>
         <span className="visually-hidden">Previous</span>
       </button>
       <button 
-        className="carousel-control-next" 
+        className="carousel-control-next h-75 mt-4" 
         type="button" 
         onClick={nextSongs} 
         disabled={currentIndex + 4 >= songs.length}
+        hidden ={currentIndex + 4 >= songs.length}
       >
-        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+        <span className="carousel-control-next-icon bg-black rounded-1" aria-hidden="true"></span>
         <span className="visually-hidden">Next</span>
       </button>
+      <hr className="mt-5 opacity-25 border"/>
     </div>
+    
   );
 }
 

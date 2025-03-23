@@ -1,11 +1,11 @@
 import React from "react";
-import UsersSidebarElement from "./UsersSidebarElement copy";
+import UsersSidebarElement from "./UsersSidebarElement";
 import LikesSidebarElement from "./LikesSidebarElement";
 
 function Sidebar(){
     return (
-          <div className="p-3 position-absolute end-0 h-100 col-4" >
-            <ul className="list-unstyled ps-5">
+          <div className="position-absolute end-0 h-100 col-4 border-start" >
+            <ul className="list-unstyled ps-4">
               <UsersSidebarElement></UsersSidebarElement>
               <LikesSidebarElement userId={1}></LikesSidebarElement>
             </ul>

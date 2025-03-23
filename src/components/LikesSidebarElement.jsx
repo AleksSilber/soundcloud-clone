@@ -31,8 +31,10 @@ function LikesSidebarElement({ userId }) {
   }, [userId]);
 
   return (
-    <li>
+    <li className="mt-5">
       <a className="pe-5">Recently Liked Songs</a>
+      <a href="/likes" className="ps-5">View all</a>
+      <hr className="w-75 border opacity-25" />
       <ul className="list-unstyled">
         {likedSongs.map((song, index) => (
           <li key={index}>

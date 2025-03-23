@@ -1,20 +1,19 @@
 import './App.css';
 import Navbar from './components/Navbar.jsx';
-import Sidebar from './components/Sidebar.jsx';
-import SongSlider from './components/SongSlider.jsx';
-import PlaylistSlider from './components/PlaylistSlider.jsx';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomePage from './pages/HomePage.js';
+import LikePage from './pages/LikesPage.js';
+import FeedPage from './pages/FeedPage.js';
 function App() {
   return (
-    <div>
-      <Navbar></Navbar>
-      <div className="d-flex pt-5">
-        <Sidebar></Sidebar>
-        <div className='d-block'>
-        <SongSlider></SongSlider>
-        <PlaylistSlider></PlaylistSlider>
-        </div>
-      </div>
-    </div>
+    <BrowserRouter>
+    <Navbar></Navbar>
+    <Routes>
+      <Route path='/' element={<HomePage  />}/>
+      <Route path='likes' element={<LikePage />} />
+      <Route path='feed' element={<FeedPage />} />
+    </Routes>
+    </BrowserRouter>
   );
 }
 
